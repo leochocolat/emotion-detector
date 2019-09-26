@@ -8,6 +8,7 @@ module.exports = {
   entry: {
     app: './src/javascript/index.js'
   },
+  node: { fs: 'empty' },
   plugins: [
     new CleanWebpackPlugin(),
     new CopyPlugin([
