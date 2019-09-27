@@ -9,6 +9,7 @@ canvas, video {
 }
 
 video {
+    transform: scaleX(-1);
     opacity: .2;
 }
 

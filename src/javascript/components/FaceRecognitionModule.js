@@ -31,10 +31,13 @@ class FaceRecognitionModule {
 
   _getCamera() {
     this._video = document.querySelector('.webcam-stream');
-    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-      this._video.srcObject = stream;
-      this._detectFace();
-    });
+    navigator.mediaDevices
+      .getUserMedia({ video: { facingMode: { exact: 'user' } } })
+      .then(stream => {
+        this._video.srcObject = stream;
+        console.log(this._video);
+        this._detectFace();
+      });
   }
 
   _detectFace() {

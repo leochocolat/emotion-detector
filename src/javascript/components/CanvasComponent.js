@@ -65,13 +65,15 @@ class CanvasComponent {
 
   _initConfettis() {
     this._confettisColor = [
-      'blue',
-      'red',
-      'green',
-      'pink',
-      'yellow',
-      'purple',
-      'orange'
+      '#fafafa',
+      '#f5f5f5',
+      '#eeeeee',
+      '#e0e0e0',
+      '#bdbdbd',
+      '#e9e9e9',
+      '#757575',
+      '#616161',
+      '#424242'
     ];
 
     this._confettis = [];
@@ -152,36 +154,36 @@ class CanvasComponent {
       //left: 48, right: 54, Top: 57, bottom: 50
       let center = {
         x:
-          (responsePositions[54].x - responsePositions[48].x) / 2 +
-          responsePositions[48].x,
+          (responsePositions[54].newX - responsePositions[48].newX) / 2 +
+          responsePositions[48].newX,
         y:
           (responsePositions[57].y - responsePositions[50].y) / 2 +
           responsePositions[50].y
       };
       let top = {
-        x: responsePositions[57].x,
+        x: responsePositions[57].newX,
         y: responsePositions[57].y
       };
       let right = {
-        x: responsePositions[54].x,
+        x: responsePositions[54].newX,
         y: responsePositions[54].y
       };
       let bottom = {
-        x: responsePositions[50].x,
+        x: responsePositions[50].newX,
         y: responsePositions[50].y
       };
       let left = {
-        x: responsePositions[48].x,
+        x: responsePositions[48].newX,
         y: responsePositions[48].y
       };
 
       this._mouseBoundingBoxes.push({ center, top, right, bottom, left });
 
-      this._ctx.beginPath();
-      this._ctx.fillStyle = 'red';
-      this._ctx.arc(center.x, center.y, 5, 0, 2 * Math.PI);
-      this._ctx.fill();
-      this._ctx.closePath();
+      // this._ctx.beginPath();
+      // this._ctx.fillStyle = 'red';
+      // this._ctx.arc(center.x, center.y, 5, 0, 2 * Math.PI);
+      // this._ctx.fill();
+      // this._ctx.closePath();
     }
   }
 
@@ -189,7 +191,7 @@ class CanvasComponent {
     if (!this._faceDescriptions) return;
 
     let radius = 2;
-    this._ctx.fillStyle = 'white';
+    this._ctx.fillStyle = '#efefef';
     this._ctx.font = '10px Arial';
 
     for (let n = 0; n < this._faceDescriptions.length; n++) {
@@ -197,11 +199,23 @@ class CanvasComponent {
       for (let i = 48; i < 60; i++) {
         // this._ctx.fillText(`${i}`, positions[i].x, positions[i].y);
         this._ctx.beginPath();
-        this._ctx.arc(positions[i].x, positions[i].y, radius, 0, 2 * Math.PI);
+        this._ctx.arc(
+          positions[i].newX,
+          positions[i].y,
+          radius,
+          0,
+          2 * Math.PI
+        );
         this._ctx.closePath();
 
         this._ctx.beginPath();
-        this._ctx.arc(positions[i].x, positions[i].y, radius, 0, 2 * Math.PI);
+        this._ctx.arc(
+          positions[i].newX,
+          positions[i].y,
+          radius,
+          0,
+          2 * Math.PI
+        );
         this._ctx.closePath();
 
         this._ctx.fill();
@@ -250,13 +264,26 @@ class CanvasComponent {
     this.note = this.components.SoundComponent.getCurrentNote();
   }
 
+  _drawBackground() {
+    this._ctx.beginPath();
+    this._ctx.fillStyle = 'black';
+    this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.width);
+    this._ctx.closePath();
+  }
+
   _draw() {
     this._ctx.clearRect(0, 0, this._width, this._height);
 
-    this._faceDescriptions = this.components.faceDetection.getFaceDescription(
+    let detection = this.components.faceDetection.getFaceDescription(
       this._width,
       this._height
     );
+
+    this._faceDescriptions = this._reverseDetectionX(detection);
+
+    console.log(this._faceDescriptions);
+
+    this._drawBackground();
 
     this._getMouseBoudingBoxes();
     this._getNote();
@@ -271,6 +298,21 @@ class CanvasComponent {
     this._mouseOpenHandler();
 
     this._ctx.globalAlpha = 1;
+  }
+
+  _reverseDetectionX(detection) {
+    if (!detection) return;
+
+    for (let n = 0; n < detection.length; n++) {
+      for (let i = 0; i < detection[n].landmarks.positions.length; i++) {
+        let newPositionX =
+          this._width / 2 +
+          (this._width / 2 - detection[n].landmarks.positions[i].x);
+        detection[n].landmarks.positions[i].newX = newPositionX;
+      }
+    }
+
+    return detection;
   }
 
   _setupEventListener() {
