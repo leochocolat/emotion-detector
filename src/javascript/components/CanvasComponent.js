@@ -278,7 +278,7 @@ class CanvasComponent {
   _drawVideo() {
     this._ctx.save();
     this._ctx.setTransform(-1, 0, 0, 1, 0, 0);
-    this._ctx.globalAlpha = 0.2;
+    this._ctx.globalAlpha = 0.8;
     this._ctx.drawImage(this.ui.video, -this._width, 0);
     this._ctx.setTransform(1, 0, 0, 1, 0, 0);
     this._ctx.restore();

@@ -28,6 +28,25 @@ class ScreenShotModule {
 
     let dataUrl = this.ui.canvas.toDataURL('image/png');
 
+    const blobBin = atob(dataUrl.split(',')[1]);
+    const array = [];
+
+    for (var i = 0; i < blobBin.length; i++) {
+      array.push(blobBin.charCodeAt(i));
+    }
+
+    const file = new Blob([new Uint8Array(array)], { type: 'image/png' });
+
+    const formData = new FormData();
+    formData.append('title', 'New Experience');
+    formData.append('experiment', file);
+
+    fetch('http://localhost:5000/experiment/', {
+      body: formData,
+      method: 'post'
+    });
+
+    //CREATE DOWNLOAD BTN
     if (document.querySelector('.button__download')) {
       document.querySelector('.button__download').href = dataUrl;
     } else {
