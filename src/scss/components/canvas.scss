@@ -9,5 +9,11 @@ canvas, video {
 }
 
 video {
-    opacity: .5;
+    opacity: .2;
+}
+
+.button__screenshot {
+    position: absolute;
+    left: 0;
+    top: 0
 }
