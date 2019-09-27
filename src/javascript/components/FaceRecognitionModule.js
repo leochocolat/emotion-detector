@@ -35,7 +35,6 @@ class FaceRecognitionModule {
       .getUserMedia({ video: { facingMode: { exact: 'user' } } })
       .then(stream => {
         this._video.srcObject = stream;
-        console.log(this._video);
         this._detectFace();
       });
   }

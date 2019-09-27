@@ -28,12 +28,17 @@ class ScreenShotModule {
 
     let dataUrl = this.ui.canvas.toDataURL('image/png');
 
-    let href = document.createElement('a');
-    href.innerHTML = 'Download image';
-    href.href = dataUrl;
-    href.download = 'MyExperience.png';
+    if (document.querySelector('.button__download')) {
+      document.querySelector('.button__download').href = dataUrl;
+    } else {
+      let href = document.createElement('a');
+      href.innerHTML = 'Download image';
+      href.href = dataUrl;
+      href.classList.add('button__download');
+      href.download = 'MyExperience.png';
 
-    document.body.appendChild(href);
+      document.body.appendChild(href);
+    }
   }
 
   _setupEventListener() {

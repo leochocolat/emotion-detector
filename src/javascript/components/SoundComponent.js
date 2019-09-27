@@ -1,13 +1,38 @@
 import _ from 'underscore';
+import Tone from 'tone';
+
+var synth = new Tone.PolySynth().toMaster();
 
 import autoCorrelate from '../modules/autoCorrelate';
 import Note from '../utils/Note';
 
 class SoundComponent {
+  static get DECAY() {
+    return 500;
+  }
+
   constructor() {
     _.bindAll(this, '_getPitch');
-
+    this._last = 0;
     this._setup();
+  }
+
+  get note() {
+    return this._note;
+  }
+
+  set note(value) {
+    if (value == this._note && value !== undefined) {
+      this.playCurrentNote();
+    }
+    this._note = value;
+  }
+
+  playCurrentNote() {
+    if (Date.now() - this._last > SoundComponent.DECAY) {
+      synth.triggerAttackRelease(this._note + '3', '4n');
+      this._last = Date.now();
+    }
   }
 
   _setup() {
@@ -45,7 +70,7 @@ class SoundComponent {
     this._analyser.getFloatTimeDomainData(frequency);
 
     let autoCorrelation = autoCorrelate(frequency, sampleRate);
-    this._note = Note.getNoteFromPitch(autoCorrelation).note;
+    this.note = Note.getNoteFromPitch(autoCorrelation).note;
 
     requestAnimationFrame(this._getPitch);
   }
@@ -54,6 +79,11 @@ class SoundComponent {
     if (this._note === undefined) return;
     let harmonies = Note.getHarmoniesFromNote();
 
+    //create a synth and connect it to the master output (your speakers)
+
+    //play a middle 'C' for the duration of an 8th note
+    synth.triggerAttackRelease(this._note + '3', '4n');
+    console.log(this._note + '3');
     // this._oscillator.connect(this._audioContext.destination);
   }
 

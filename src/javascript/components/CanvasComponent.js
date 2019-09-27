@@ -16,6 +16,10 @@ class CanvasComponent {
       '_initConfettis'
     );
 
+    this.ui = {
+      video: document.querySelector('video')
+    };
+
     this._canvas = document.querySelector('.js-canvas-component');
     this._canvas.style.background = 'black';
     this._ctx = this._canvas.getContext('2d');
@@ -271,6 +275,15 @@ class CanvasComponent {
     this._ctx.closePath();
   }
 
+  _drawVideo() {
+    this._ctx.save();
+    this._ctx.setTransform(-1, 0, 0, 1, 0, 0);
+    this._ctx.globalAlpha = 0.2;
+    this._ctx.drawImage(this.ui.video, -this._width, 0);
+    this._ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this._ctx.restore();
+  }
+
   _draw() {
     this._ctx.clearRect(0, 0, this._width, this._height);
 
@@ -278,12 +291,10 @@ class CanvasComponent {
       this._width,
       this._height
     );
-
     this._faceDescriptions = this._reverseDetectionX(detection);
 
-    console.log(this._faceDescriptions);
-
     this._drawBackground();
+    this._drawVideo();
 
     this._getMouseBoudingBoxes();
     this._getNote();

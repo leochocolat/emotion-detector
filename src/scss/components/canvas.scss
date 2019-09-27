@@ -9,12 +9,7 @@ canvas, video {
 }
 
 video {
+    display: none;
     transform: scaleX(-1);
     opacity: .2;
-}
-
-.button__screenshot {
-    position: absolute;
-    left: 0;
-    top: 0
 }
