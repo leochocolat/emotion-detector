@@ -12,7 +12,6 @@ const mtcnnForwardParams = {
 class FaceRecognitionModule {
   constructor() {
     this._loadModels();
-    // this._detectFace();
     // this._draw();
   }
 
@@ -62,6 +61,10 @@ class FaceRecognitionModule {
       this._fullFaceDescriptions,
       displaySize
     );
+
+    this._canvas
+      .getContext('2d')
+      .clearRect(0, 0, displaySize.width, displaySize.height);
 
     FaceApi.draw.drawDetections(this._canvas, resizeDetection);
     FaceApi.draw.drawFaceLandmarks(this._canvas, resizeDetection);

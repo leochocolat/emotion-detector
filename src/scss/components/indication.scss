@@ -1,8 +1,24 @@
-.indication {
+.indication-container {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
 
     user-select: none;
+
+    color: white;
+
+    text-align: center;
+
+    .indication__button {
+        margin-top: 40px;
+
+        text-transform: uppercase;
+        transition: .2s ease-in-out opacity;
+
+        &:hover {
+            cursor: pointer;
+            opacity: .6;
+        }
+    }
 }

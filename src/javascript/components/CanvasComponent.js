@@ -42,7 +42,7 @@ class CanvasComponent {
       .step(1)
       .onChange(this._initConfettis);
     gui.add(this._settings, 'speed', 1, 100).step(1);
-    gui.add(this._settings, 'shootInterval', 100, 1000).step(1);
+    gui.add(this._settings, 'shootInterval', 10, 1000).step(1);
     gui.add(this._settings, 'fontSize', 1, 500).step(1);
 
     this._isMouseDetected = false;

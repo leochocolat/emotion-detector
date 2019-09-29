@@ -1,10 +1,12 @@
 import _ from 'underscore';
 import Tone from 'tone';
+import { TweenLite } from 'gsap';
 
 var synth = new Tone.PolySynth().toMaster();
 
 import autoCorrelate from '../modules/autoCorrelate';
 import Note from '../utils/Note';
+import { Power1 } from 'gsap/EasePack';
 
 class SoundComponent {
   static get DECAY() {
@@ -46,7 +48,9 @@ class SoundComponent {
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: false })
       .then(stream => {
-        document.querySelector('.js-indication').innerHTML = '';
+        let indication = document.querySelector('.js-indication');
+        indication.innerHTML = '';
+        indication.visibility = 'hidden';
         this._microphone = this._audioContext.createMediaStreamSource(stream);
 
         this._setupAnalyser();

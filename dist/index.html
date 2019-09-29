@@ -9,15 +9,21 @@
 </head>
 <body>
 
-  <div class="indication js-indication">
-    <!-- This is a sound experience, click to begin -->
-  </div>
-
+  
   <canvas class="js-canvas-component" width="640" height="480"></canvas>
   <video class="webcam-stream" autoplay></video>
+  
+  <button style="display: none" class="button button__screenshot">Post Image</button>
 
+  <div class="indication-container">
+      <div class="indication js-indication">
+          This is a sound experience, please use headphones.
+        </div>
+        <div class="indication__button js-indication__button">
+          Start
+        </div>
+  </div>
 
-  <button class="button button__screenshot">Post Image</button>
 
   <script src="./javascript/app.bundle.js"></script>
 
