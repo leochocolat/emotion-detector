@@ -31,7 +31,7 @@ class FaceRecognitionModule {
   _getCamera() {
     this._video = document.querySelector('.webcam-stream');
     navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: { exact: 'user' } } })
+      .getUserMedia({ video: true })
       .then(stream => {
         this._video.srcObject = stream;
         this._detectFace();
