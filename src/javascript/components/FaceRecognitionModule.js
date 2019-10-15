@@ -43,32 +43,32 @@ class FaceRecognitionModule {
       .withFaceLandmarks()
       .then(response => {
         this._fullFaceDescriptions = response;
-        this._draw();
+        // this._draw();
       });
 
     requestAnimationFrame(this._detectFace.bind(this));
   }
 
-  _draw() {
-    this._canvas = document.querySelector('.js-canvas-component');
+  // _draw() {
+  //   this._canvas = document.querySelector('.js-canvas-component');
 
-    let displaySize = {
-      width: this._canvas.width,
-      height: this._canvas.height
-    };
+  //   let displaySize = {
+  //     width: this._canvas.width,
+  //     height: this._canvas.height
+  //   };
 
-    const resizeDetection = FaceApi.resizeResults(
-      this._fullFaceDescriptions,
-      displaySize
-    );
+  //   const resizeDetection = FaceApi.resizeResults(
+  //     this._fullFaceDescriptions,
+  //     displaySize
+  //   );
 
-    this._canvas
-      .getContext('2d')
-      .clearRect(0, 0, displaySize.width, displaySize.height);
+  //   this._canvas
+  //     .getContext('2d')
+  //     .clearRect(0, 0, displaySize.width, displaySize.height);
 
-    FaceApi.draw.drawDetections(this._canvas, resizeDetection);
-    FaceApi.draw.drawFaceLandmarks(this._canvas, resizeDetection);
-  }
+  //   FaceApi.draw.drawDetections(this._canvas, resizeDetection);
+  //   FaceApi.draw.drawFaceLandmarks(this._canvas, resizeDetection);
+  // }
 
   getFaceDescription(width, height) {
     if (!this._fullFaceDescriptions) return;

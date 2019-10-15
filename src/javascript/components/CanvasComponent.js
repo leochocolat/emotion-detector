@@ -2,7 +2,6 @@ import _ from 'underscore';
 import { TweenLite } from 'gsap/TweenMax';
 import Lerp from '../utils/Lerp.js';
 import FaceRecognitionModule from './FaceRecognitionModule.js';
-import SoundComponent from './SoundComponent.js';
 import dat from 'dat.gui';
 
 //
@@ -12,8 +11,7 @@ class CanvasComponent {
       this,
       '_tickHandler',
       '_resizeHandler',
-      '_mousemoveHandler',
-      '_initConfettis'
+      '_mousemoveHandler'
     );
 
     this.ui = {
@@ -26,7 +24,6 @@ class CanvasComponent {
 
     this.components = {
       faceDetection: new FaceRecognitionModule(),
-      SoundComponent: new SoundComponent()
     };
 
     this._settings = {
@@ -67,93 +64,32 @@ class CanvasComponent {
     this._canvas.height = this._height;
   }
 
-  _initConfettis() {
-    this._confettisColor = [
-      '#fafafa',
-      '#f5f5f5',
-      '#eeeeee',
-      '#e0e0e0',
-      '#bdbdbd',
-      '#e9e9e9',
-      '#757575',
-      '#616161',
-      '#424242'
-    ];
-
-    this._confettis = [];
-
-    let conffeti = {
-      position: this._mouseBoundingBoxes[0].center,
-      opacity: 1,
-      rotation: Math.random() * 100,
-      content: this.note,
-      color: this._confettisColor[
-        Math.round(Math.random() * this._confettisColor.length - 1)
-      ]
-    };
-    this._confettis.push(conffeti);
-
-    this._addConfettis();
-  }
-
-  _addConfettis() {
-    setInterval(() => {
-      if (!this._mouseBoundingBoxes[0]) return;
-
-      let conffeti = {
-        position: this._mouseBoundingBoxes[0].center,
-        opacity: 1,
-        rotation: Math.random() * 100,
-        content: this.note,
-        color: this._confettisColor[
-          Math.round(Math.random() * this._confettisColor.length - 1)
-        ]
-      };
-      this._confettis.push(conffeti);
-    }, this._settings.shootInterval);
-  }
-
-  _updateConfettis() {
-    if (!this._confettis) return;
-    if (!this._mouseBoundingBoxes[0]) return;
-
-    for (let i = 0; i < this._confettis.length; i++) {
-      this._confettis[i].position.y -= this._settings.speed;
-      this._confettis[i].rotation += this._settings.speed * 0.01;
-      this._confettis[i].opacity -= this._settings.speed * 0.001;
-
-      // if (this._confettis[i].position.y <= 0) {
-      //   this._confettis[i].position = this._mouseBoundingBoxes[0].center;
-      //   this._confettis[i].opacity = 1;
-      // }
-    }
-  }
-
-  _drawConfettis() {
-    if (!this._confettis) return;
-    //STYLES
-    this._ctx.font = `${this._settings.fontSize}px arial`;
-
-    for (let i = 0; i < this._confettis.length; i++) {
-      this._ctx.beginPath();
-      this._ctx.fillStyle = this._confettis[i].color;
-      this._ctx.globalAlpha = this._confettis[i].opacity;
-      this._ctx.fillText(
-        this._confettis[i].content,
-        this._confettis[i].position.x,
-        this._confettis[i].position.y
-      );
-      this._ctx.closePath();
-    }
-  }
-
   _getMouseBoudingBoxes() {
     if (!this._faceDescriptions) return;
 
+    const radius = 1.5;
+    
     this._mouseBoundingBoxes = [];
-
+    
     for (let n = 0; n < this._faceDescriptions.length; n++) {
       let responsePositions = this._faceDescriptions[n].landmarks.positions;
+
+      for (let i = 0; i < responsePositions.length; i++) {
+        this._ctx.beginPath();
+        if (i == 0) {
+          this._ctx.moveTo(responsePositions[i].newX, responsePositions[i].y);
+        } else {
+          this._ctx.lineTo(responsePositions[i].newX, responsePositions[i].y);
+        }
+        this._ctx.closePath();
+        this._ctx.stroke();
+
+        this._ctx.beginPath();
+        this._ctx.fillStyle = '#04F802';
+        this._ctx.arc(responsePositions[i].newX, responsePositions[i].y, radius, 0, 2 * Math.PI);
+        this._ctx.closePath();
+        this._ctx.fill();
+      }
 
       //left: 48, right: 54, Top: 57, bottom: 50
       let center = {
@@ -183,94 +119,17 @@ class CanvasComponent {
 
       this._mouseBoundingBoxes.push({ center, top, right, bottom, left });
 
-      // this._ctx.beginPath();
-      // this._ctx.fillStyle = 'red';
-      // this._ctx.arc(center.x, center.y, 5, 0, 2 * Math.PI);
-      // this._ctx.fill();
-      // this._ctx.closePath();
+      this._ctx.beginPath();
+      this._ctx.fillStyle = 'red';
+      this._ctx.arc(center.x, center.y, 5, 0, 2 * Math.PI);
+      this._ctx.fill();
+      this._ctx.closePath();
     }
   }
-
-  _drawMouses() {
-    if (!this._faceDescriptions) return;
-
-    let radius = 2;
-    this._ctx.fillStyle = '#efefef';
-    this._ctx.font = '10px Arial';
-
-    for (let n = 0; n < this._faceDescriptions.length; n++) {
-      let positions = this._faceDescriptions[n].landmarks.positions;
-      for (let i = 48; i < 60; i++) {
-        // this._ctx.fillText(`${i}`, positions[i].x, positions[i].y);
-        this._ctx.beginPath();
-        this._ctx.arc(
-          positions[i].newX,
-          positions[i].y,
-          radius,
-          0,
-          2 * Math.PI
-        );
-        this._ctx.closePath();
-
-        this._ctx.beginPath();
-        this._ctx.arc(
-          positions[i].newX,
-          positions[i].y,
-          radius,
-          0,
-          2 * Math.PI
-        );
-        this._ctx.closePath();
-
-        this._ctx.fill();
-      }
-    }
-  }
-
-  _drawNote() {
-    if (!this._mouseBoundingBoxes) return;
-
-    let content = this.note;
-    if (this.note == undefined) {
-      content = 'SING';
-    }
-
-    this._ctx.fillStyle = 'white';
-    this._ctx.font = '100px Arial';
-
-    this._ctx.setTransform(1, 0, 0, 1, 0, 0);
-    this._ctx.fillText(content, this._width / 2, this._height / 2);
-  }
-
-  _mouseDetectedHandler() {
-    if (this._isMouseDetected) return;
-    if (!this._faceDescriptions) return;
-
-    this._isMouseDetected = true;
-    this._initConfettis();
-  }
-
-  _mouseOpenHandler() {
-    if (!this._mouseBoundingBoxes) return;
-
-    for (let n = 0; n < this._mouseBoundingBoxes.length; n++) {
-      let mouseOpenSize =
-        this._mouseBoundingBoxes[n].bottom - this._mouseBoundingBoxes[n].top;
-      if (mouseOpenSize > 5) {
-        console.log(n);
-      }
-    }
-  }
-
-  _getNote() {
-    if (!this.components.SoundComponent.getCurrentNote()) return;
-
-    this.note = this.components.SoundComponent.getCurrentNote();
-  }
-
+  
   _drawBackground() {
     this._ctx.beginPath();
-    this._ctx.fillStyle = 'black';
+    this._ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
     this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.width);
     this._ctx.closePath();
   }
@@ -285,7 +144,7 @@ class CanvasComponent {
   }
 
   _draw() {
-    this._ctx.clearRect(0, 0, this._width, this._height);
+    this._drawBackground();
 
     let detection = this.components.faceDetection.getFaceDescription(
       this._width,
@@ -293,20 +152,9 @@ class CanvasComponent {
     );
     this._faceDescriptions = this._reverseDetectionX(detection);
 
-    this._drawBackground();
-    this._drawVideo();
+    // this._drawVideo();
 
     this._getMouseBoudingBoxes();
-    this._getNote();
-
-    this._drawMouses();
-    // this._drawNote();
-
-    this._updateConfettis();
-    this._drawConfettis();
-
-    this._mouseDetectedHandler();
-    this._mouseOpenHandler();
 
     this._ctx.globalAlpha = 1;
   }
