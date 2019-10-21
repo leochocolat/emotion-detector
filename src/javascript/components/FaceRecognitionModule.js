@@ -12,15 +12,18 @@ const mtcnnForwardParams = {
 class FaceRecognitionModule {
   constructor() {
     this._loadModels();
-    // this._draw();
   }
 
   _loadModels() {
     let promises = [
       FaceApi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
       FaceApi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+      FaceApi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
       FaceApi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-      FaceApi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
+      FaceApi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+      FaceApi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+      FaceApi.nets.ageGenderNet.loadFromUri(MODEL_URL),
+      FaceApi.nets.mtcnn.loadFromUri(MODEL_URL)
     ];
 
     Promise.all(promises).then(() => {
@@ -41,34 +44,51 @@ class FaceRecognitionModule {
   _detectFace() {
     FaceApi.detectAllFaces(this._video, new FaceApi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
+      .withFaceExpressions()
+      .withAgeAndGender()
       .then(response => {
         this._fullFaceDescriptions = response;
-        // this._draw();
+        console.log(response);
+        this._draw();
+        this._displayEmotions();
       });
 
     requestAnimationFrame(this._detectFace.bind(this));
   }
 
-  // _draw() {
-  //   this._canvas = document.querySelector('.js-canvas-component');
+  _displayEmotions() {
+    if (!this._fullFaceDescriptions) return;
+    if (!this._fullFaceDescriptions[0].expressions) return;
 
-  //   let displaySize = {
-  //     width: this._canvas.width,
-  //     height: this._canvas.height
-  //   };
+    document.querySelector('.js-emotion-neutral').innerHTML = Math.round(this._fullFaceDescriptions[0].expressions.neutral);
+    document.querySelector('.js-emotion-disgusted').innerHTML = Math.round(this._fullFaceDescriptions[0].expressions.disgusted);
+    document.querySelector('.js-emotion-fearful').innerHTML = Math.round(this._fullFaceDescriptions[0].expressions.fearful);
+    document.querySelector('.js-emotion-happy').innerHTML = Math.round(this._fullFaceDescriptions[0].expressions.happy);
+    document.querySelector('.js-emotion-sad').innerHTML = Math.round(this._fullFaceDescriptions[0].expressions.sad);
+    document.querySelector('.js-emotion-surprised').innerHTML = Math.round(this._fullFaceDescriptions[0].expressions.surprised);
+    document.querySelector('.js-emotion-angry').innerHTML = Math.round(this._fullFaceDescriptions[0].expressions.angry);
+  }
 
-  //   const resizeDetection = FaceApi.resizeResults(
-  //     this._fullFaceDescriptions,
-  //     displaySize
-  //   );
+  _draw() {
+    this._canvas = document.querySelector('.js-canvas-component');
 
-  //   this._canvas
-  //     .getContext('2d')
-  //     .clearRect(0, 0, displaySize.width, displaySize.height);
+    let displaySize = {
+      width: this._canvas.width,
+      height: this._canvas.height
+    };
 
-  //   FaceApi.draw.drawDetections(this._canvas, resizeDetection);
-  //   FaceApi.draw.drawFaceLandmarks(this._canvas, resizeDetection);
-  // }
+    const resizeDetection = FaceApi.resizeResults(
+      this._fullFaceDescriptions,
+      displaySize
+    );
+
+    this._canvas
+      .getContext('2d')
+      .clearRect(0, 0, displaySize.width, displaySize.height);
+
+    FaceApi.draw.drawDetections(this._canvas, resizeDetection);
+    FaceApi.draw.drawFaceLandmarks(this._canvas, resizeDetection);
+  }
 
   getFaceDescription(width, height) {
     if (!this._fullFaceDescriptions) return;
