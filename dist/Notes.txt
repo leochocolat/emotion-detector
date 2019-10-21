@@ -1,0 +1,10 @@
+Home screen : Indications, autoriser caméra, conseils lumière...
+--> Si reponse Face API : Display video
+--> Première Vidéo Press Play : Start Recording data
+
+
+Init object empty
+on Play : Start recording data by pushing expressions each frame and video progress
+
+when all videos done : Send data object
+

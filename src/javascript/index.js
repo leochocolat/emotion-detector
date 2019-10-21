@@ -1,3 +1,3 @@
-import CanvasComponent from './components/CanvasComponent.js';
+import FaceRecognitionModule from './components/FaceRecognitionModule.js';
 
-new CanvasComponent();
+new FaceRecognitionModule();

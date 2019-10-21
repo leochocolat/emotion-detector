@@ -1,4 +1,4 @@
-canvas, video {
+canvas {
     position: absolute;
     left: 0;
     right: 0;
@@ -6,10 +6,6 @@ canvas, video {
     bottom: 0;
 
     margin: auto;
-}
 
-video {
     display: none;
-    transform: scaleX(-1);
-    opacity: .2;
 }

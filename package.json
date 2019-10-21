@@ -1,7 +1,7 @@
 {
-  "name": "soundcanvas",
+  "name": "emotion-detection",
   "version": "1.0.0",
-  "description": "School Project about canvas and web audio API",
+  "description": "School Project about data vizualisation",
   "private": true,
   "scripts": {
     "start": "gulp",

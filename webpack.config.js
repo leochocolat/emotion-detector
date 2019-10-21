@@ -13,7 +13,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new CopyPlugin([
       {
-        from: './src/index.html',
+        from: './src',
         to: path.resolve(__dirname, 'dist')
       }
     ])
