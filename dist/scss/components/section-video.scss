@@ -8,30 +8,100 @@
     justify-content: center;
     align-items: center;
     
-    background: grey;
+    .video {
+        display: none;
 
-    video {
         width: 70%;
         height: auto;
+    }
+
+    .progress {
+        display: block;
+    
+        width: 69.6%;
+        height: 4px;
+
+        font-size: 0;
+
+        background: white;
     }
 }
 
 .button__video {
+    transition: all .1s ease-in-out;
+
     position: absolute;
     left: 50%;
     top: 50%;
 
     transform: translate(-50%, -50%);
 
-    font-size: 20px;
-    padding: 20px 40px;
+    width: 50px;
+    height: 50px;
 
-    border-radius: 20px;
+    border-radius: 50%;
 
     border: none;
     outline: none;
 
+    background: transparent;
+
+    border: solid 1px white;
+
+    &:before {
+        display : inline-block;
+
+        position: absolute;
+        left: 50%;
+        top: 50%;
+
+        transform: translate(-40%, -50%);
+
+        height : 0;
+        width : 0;
+        
+        border-top : 5px solid transparent;
+        border-bottom : 5px solid transparent;
+        border-left : 8px solid white;
+
+        content: '';
+    }
+
     &:hover {
-        background: rgba(200, 200, 200, 1);
+        width: 51px;
+        height: 51px;
+
+        cursor: pointer;
+    }
+}
+
+.submit-container {
+    text-align: center;
+
+    margin-top: 50px;
+    margin-bottom: 200px;
+}
+
+.submit {
+    margin-top: 100px;
+    text-align: center;
+
+    width: 300px;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    color: white;
+
+    font-size: 20px;
+    font-weight: lighter;
+    background: transparent;
+    border: 1px solid white;
+    outline: none;
+
+    &:hover {
+        color: white;
+
+        cursor: pointer;
     }
 }

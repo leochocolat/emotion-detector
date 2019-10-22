@@ -8,3 +8,26 @@
 
     background: black;
 }
+
+.loading {
+    position: absolute;
+    left: 20%;
+    top: 30%;
+
+    font-size: 80px;
+    color: #00ff00;
+    text-transform: uppercase;
+
+    font-weight: lighter;
+}
+
+.instructions {
+    position: absolute;
+    left: 20%;
+    top: 50%;
+
+    color: white;
+    text-transform: uppercase;
+    line-height: 25px;
+    font-weight: lighter;
+}

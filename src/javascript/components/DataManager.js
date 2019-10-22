@@ -1,4 +1,3 @@
-
 class DataManager {
 
     constructor() {
@@ -35,7 +34,9 @@ class DataManager {
 
         let videoData = {
             progress: video.currentTime,
-            emotions: data.expressions
+            emotions: data.expressions,
+            landmarks: data.landmarks,
+            unshiftedLandmarks: data.unshiftedLandmarks
         }
 
         this.data[video.classList[0]].push(videoData);

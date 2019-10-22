@@ -15,25 +15,35 @@
   <section class="container">
 
     <section class="section-video section-video-1">
-      <video src="assets/videos/video1.mp4" controls class="video-1 js-video"></video>
-      <button class="button__video js-button__video button__video-1">Play</button>
+      <video src="assets/videos/video1.mp4" class="video-1 js-video video"></video>
+      <span class="progress js-video-progress"></span>
+      <button class="button__video js-button__video button__video-1"></button>
     </section>
     <section class="section-video section-video-2">
-      <video src="assets/videos/video1.mp4" controls class="video-2 js-video"></video>
-      <button class="button__video js-button__video button__video-2">Play</button>
+      <video src="assets/videos/video1.mp4" class="video-2 js-video video"></video>
+      <span class="progress js-video-progress"></span>
+      <button class="button__video js-button__video button__video-2"></button>
     </section>
     <section class="section-video section-video-3">
-      <video src="assets/videos/video1.mp4" controls class="video-3 js-video"></video>
-      <button class="button__video js-button__video button__video-3">Play</button>
+      <video src="assets/videos/video1.mp4" class="video-3 js-video video"></video>
+      <span class="progress js-video-progress"></span>
+      <button class="button__video js-button__video button__video-3"></button>
     </section>
+    <div class="submit-container">
+      <button class="submit">SUBMIT</button>
+    </div>
 
-    <button class="submit">SUBMIT</button>
-  </section>
-  
-
-  <section class="section-loading js-section-loading">
   </section>
 
+  <section class="section-loading js-section-loading"></section>
+    <div class="loading js-loading__item">
+      <p>Loading...</p>
+    </div>
+    <div class="instructions js-loading__item">
+      Please let us access your camera in order to record your emotions.<br>
+      Make sure to be in a quite place and to not wear anything hidding your face.
+    </div>
+  </section>
 
   <script src="./javascript/app.bundle.js"></script>
 
